@@ -32,3 +32,39 @@ scpx() {
   scp -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" "$@"
 }
 
+announce() {
+  echo 1>&2
+  echo 1>&2
+  echo 1>&2
+  echo "======================================================================================" 1>&2
+  echo "$@" 1>&2
+  echo "======================================================================================" 1>&2
+  echo 1>&2
+  echo 1>&2
+  echo 1>&2
+}
+
+reboot() {
+  echo "Rebooting after $1" 1>&2
+  sudo shutdown -r now
+  sleep 2
+  exit 253
+}
+
+check_reboot() {
+
+  # Reboot?
+  if [[ -f /var/run/reboot-required ]]; then
+    reboot "$@"
+  fi
+}
+
+wait_for_start() {
+  echo "wait for start |${1}| whoami" 1>&2
+  while ! sshx -o ConnectTimeout=5 ${1} whoami; do
+    sleep 3
+    echo "wait for start |${1}| whoami" 1>&2
+  done
+  sleep 3
+}
+

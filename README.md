@@ -21,11 +21,11 @@ die() {
 # parse args
 for param in "$@"; do
   case $param in
-  
+
     --service=*)
       service="${param#*=}"
       ;;
-      
+
     # ...
 
   esac
