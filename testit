@@ -1,0 +1,26 @@
+#!/bin/bash -e
+
+# ./testit beanie --foo-be=bar baby --foo-it --baz- --foo=quxx -- --not-an-arg
+
+if [[ $# != 8 ]]; then
+  echo "# should be 8"
+  exit 1
+fi
+
+baz="iamset"
+
+eval "$(cli-shezargs "$@")"
+
+[[ $foo_be == bar ]] || die "foo_be should be bar"
+[[ $foo_it == 1   ]] || die "foo_it should be 1"
+[[ $foo == quxx   ]] || die "foo should be quxx"
+[[ -z $baz        ]] || die "baz should be unset"
+
+[[ $#   == 3      ]] || die "# should be 3"
+[[ $1   == beanie ]] || die "1 should be beanie"
+[[ $2   == baby   ]] || die "2 should be baby"
+
+[[ $3   == --not-an-arg ]] || die "3 should be --not-an-arg"
+
+echo "success"
+

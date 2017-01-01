@@ -1,0 +1,9 @@
+#!/bin/bash -e
+
+if [[ $1 == xx ]]; then
+  cli-shezargs beanie --foo-be=bar baby --foo-it --baz- --foo=quxx -- --not-an-arg
+else
+  $(dirname $0)/testit beanie --foo-be=bar baby --foo-it --baz- --foo=quxx -- --not-an-arg
+fi
+
+
