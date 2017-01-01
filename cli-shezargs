@@ -43,7 +43,7 @@ function parseArgs() {
     // --foo=bar      (export foo="bar")
     else if ((m = arg.match(/^--([^=]+)=(.+)$/))) {
       key = m[1].replace(/[^a-z0-9]/gi, '_');
-      process.stdout.write("export "+key+"="+m[2]+'\n');
+      process.stdout.write('export '+key+'="'+m[2]+'"\n');
     }
 
     // --foo-         (unset foo)
@@ -55,7 +55,7 @@ function parseArgs() {
     // --foo-it        (export foo_it="1")
     else if ((m = arg.match(/^--([^=]+)$/))) {
       key = m[1].replace(/[^a-z0-9]/gi, '_');
-      process.stdout.write("export "+key+"=1"+'\n');
+      process.stdout.write('export '+key+'="1'+'"\n');
     }
 
     // Otherwise, this is just a positional arg

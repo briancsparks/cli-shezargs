@@ -9,7 +9,7 @@ fi
 
 baz="iamset"
 
-eval "$(cli-shezargs "$@")"
+eval "$(cli-shezargs $@)"
 
 [[ $foo_be == bar ]] || die "foo_be should be bar"
 [[ $foo_it == 1   ]] || die "foo_it should be 1"
