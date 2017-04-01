@@ -25,19 +25,19 @@ fd() {
 }
 
 sshx() {
-  ssh -A -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" "$@"
+  ssh -A -o "ConnectTimeout 1" -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" "$@"
 }
 
 scpx() {
-  scp -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" "$@"
+  scp    -o "ConnectTimeout 1" -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" "$@"
 }
 
 sshix() {
-  ssh -A -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" -o "LogLevel=quiet" "$@"
+  ssh -A -o "ConnectTimeout 1" -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" -o "LogLevel=quiet" "$@"
 }
 
 scpix() {
-  scp -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" -o "LogLevel=quiet" "$@"
+  scp    -o "ConnectTimeout 1" -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" -o "LogLevel=quiet" "$@"
 }
 
 announce() {
