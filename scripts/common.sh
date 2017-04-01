@@ -32,6 +32,14 @@ scpx() {
   scp -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" "$@"
 }
 
+sshix() {
+  ssh -A -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" -o "LogLevel=quiet" "$@"
+}
+
+scpix() {
+  scp -o "StrictHostKeyChecking no" -o "UserKnownHostsFile=/dev/null" -o "LogLevel=quiet" "$@"
+}
+
 announce() {
   echo 1>&2
   echo 1>&2
