@@ -2,7 +2,8 @@
 
 /* vim: set ft=javascript: */
 
-var fs    = require('fs');
+var _     = require('underscore');
+var fs    = require('fs-extra');
 var path  = require('path');
 
 process.stdout.on('error', function( err ) {
@@ -11,22 +12,72 @@ process.stdout.on('error', function( err ) {
   }
 });
 
-parseArgs();
-fs.readFile(path.join(__dirname, 'scripts', 'common.sh'), function(err, common_sh) {
+var needs = {scripts:['common']};
+var hostPid, scriptName;
 
-  if (err) { console.error(err); }
-  else {
-    process.stdout.write(common_sh);
+var main = function() {
+  var tmpDir, tmpFile, logFile;
+
+  parseArgs();
+
+  if (needs.fileSupport) {
+    tmpDir  = path.join('/tmp', scriptName+'-'+hostPid);
+    tmpFile = path.join(tmpDir, 'temp');
+    logFile = path.join(tmpDir, 'logfile.log');
+    jsonFile = path.join(tmpDir, 'temp_file.json');
+
+    fs.mkdirpSync(tmpDir);
+    fs.ensureFileSync(tmpFile);
+    fs.ensureFileSync(logFile);
+    fs.ensureFileSync(jsonFile);
+
+    process.stdout.write('export TMP_DIR="'+tmpDir+'"'+'\n');
+    process.stdout.write('export TMP_FILE="'+tmpFile+'"'+'\n');
+    process.stdout.write('export LOG_FILE="'+logFile+'"'+'\n');
+    process.stdout.write('export JSON_FILE="'+jsonFile+'"'+'\n');
   }
-});
+
+  fs.readFile(path.join(__dirname, 'scripts', 'common.sh'), function(err, common_sh) {
+
+    if (err) { console.error(err); }
+    else {
+      process.stdout.write(common_sh);
+    }
+  });
+};
+main();
 
 function parseArgs() {
+
+  // What kind of support does the script want?
+  if (process.argv.length < 3) { return; }              // No args, so no pre-processing
+
+  var startArgNum = 2;
+
+  var keyArg = process.argv[startArgNum];
+  if (keyArg.startsWith('__')) {
+    startArgNum += 1;
+
+    _.each(_.rest(keyArg, 2), function(letter) {
+      if (letter === 'f') { _.extend(needs, {fileSupport:true, pid:true, name:true}); }
+    });
+  }
+
+  if (needs.pid) {
+    hostPid = process.argv[startArgNum++];
+  }
+
+  if (needs.name) {
+    scriptName = process.argv[startArgNum++].replace(/[^a-z0-9]/ig, '');
+  }
+
+  // Now, parse the args
   var positionArgs    = [];
   var pastLast        = false;
 
   var arg, m, key, i;
 
-  for (i=2; i < process.argv.length; i++) {
+  for (i=startArgNum; i < process.argv.length; i++) {
     arg               = process.argv[i];
     key               = '';
 

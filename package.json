@@ -4,15 +4,19 @@
   "description": "Easy command-line args for shell scripts.",
   "main": "index.js",
   "bin": {
-    "cli-shezargs" : "cli-shezargs"
+    "cli-shezargs": "cli-shezargs"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/briancsparks/cli-shezargs.git"
- },
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Brian C Sparks",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "fs-extra": "^2.1.2",
+    "underscore": "^1.8.3"
+  }
 }

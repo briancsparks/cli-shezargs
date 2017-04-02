@@ -76,3 +76,13 @@ wait_for_start() {
   sleep 3
 }
 
+RESET="\033[0m"
+RED="\033[31m"
+YELLOW="\033[33m"
+REDBG="\033[41m"
+
+echoerr() { echo "$@" 1>&2; }
+echoerr_red() { echo -e "${RED}${@}${RESET}" 1>&2; }
+echoerr_redbg() { echo -e "${REDBG}${@}${RESET}" 1>&2; }
+echoerr_yellow() { echo -e "${YELLOW}${@}${RESET}" 1>&2; }
+
