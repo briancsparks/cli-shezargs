@@ -31,6 +31,7 @@ var main = function() {
     fs.ensureFileSync(logFile);
     fs.ensureFileSync(jsonFile);
 
+    // TODO: these should not be exported, right?
     process.stdout.write('export TMP_DIR="'+tmpDir+'"'+'\n');
     process.stdout.write('export TMP_FILE="'+tmpFile+'"'+'\n');
     process.stdout.write('export LOG_FILE="'+logFile+'"'+'\n');
