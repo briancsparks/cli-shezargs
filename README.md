@@ -15,7 +15,13 @@ And then:
 #!/bin/bash -e
 
 eval "$(cli-shezargs $@)"
+```
 
+Which parses your command-line args and creates bash variables (see below.)
+For example, ```--foo=bar``` will get you:
+
+```sh
+foo=bar
 ```
 
 ### Overview ###
