@@ -106,8 +106,11 @@ eval "$(cli-shezargs __f $$ $0 $@)"
 eval "$(cli-shezargs)"
 ```
 
-File support gets you ```TMP_DIR```, ```TMP_FILE```, ```LOG_FILE```, and ```JSON_FILE```, which are set to
-newly-created temp files (in /tmp/... and using the PID to guarantee uniqueness).
+File support gets you:
+
+* ```TMP_DIR```, ```TMP_FILE```, ```LOG_FILE```, and ```JSON_FILE```, which are set to
+  newly-created temp files (in ```/tmp/...``` and using the PID to guarantee uniqueness).
+* ```script_dir``` -- the dir for the bash script.
 
 # How To #
 

@@ -13,7 +13,7 @@ process.stdout.on('error', function( err ) {
 });
 
 var needs = {scripts:['common']};
-var hostPid, scriptName;
+var hostPid, scriptName, safeScriptName;
 
 var main = function() {
   var tmpDir, tmpFile, logFile;
@@ -21,7 +21,7 @@ var main = function() {
   parseArgs();
 
   if (needs.fileSupport) {
-    tmpDir  = path.join('/tmp', scriptName+'-'+hostPid);
+    tmpDir  = path.join('/tmp', safeScriptName+'-'+hostPid);
     tmpFile = path.join(tmpDir, 'temp');
     logFile = path.join(tmpDir, 'logfile.log');
     jsonFile = path.join(tmpDir, 'temp_file.json');
@@ -31,11 +31,14 @@ var main = function() {
     fs.ensureFileSync(logFile);
     fs.ensureFileSync(jsonFile);
 
-    // TODO: these should not be exported, right?
-    process.stdout.write('export TMP_DIR="'+tmpDir+'"'+'\n');
-    process.stdout.write('export TMP_FILE="'+tmpFile+'"'+'\n');
-    process.stdout.write('export LOG_FILE="'+logFile+'"'+'\n');
-    process.stdout.write('export JSON_FILE="'+jsonFile+'"'+'\n');
+    process.stdout.write('TMP_DIR="'+tmpDir+'"'+'\n');
+    process.stdout.write('TMP_FILE="'+tmpFile+'"'+'\n');
+    process.stdout.write('LOG_FILE="'+logFile+'"'+'\n');
+    process.stdout.write('JSON_FILE="'+jsonFile+'"'+'\n');
+  }
+
+  if (scriptName) {
+    process.stdout.write('script_dir="'+path.join(process.cwd(), path.dirname(scriptName))+'"\n');
   }
 
   fs.readFile(path.join(__dirname, 'scripts', 'common.sh'), function(err, common_sh) {
@@ -69,7 +72,8 @@ function parseArgs() {
   }
 
   if (needs.name) {
-    scriptName = process.argv[startArgNum++].replace(/[^a-z0-9]/ig, '');
+    scriptName     = process.argv[startArgNum];
+    safeScriptName = process.argv[startArgNum++].replace(/[^a-z0-9]/ig, '');
   }
 
   // Now, parse the args
