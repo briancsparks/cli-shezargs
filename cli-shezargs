@@ -6,6 +6,13 @@ var _     = require('underscore');
 var fs    = require('fs-extra');
 var path  = require('path');
 
+if (process.argv[2] === '--help') {
+  console.log('Usage: eval $(cli-shezargs __f $$ $0 $@)     # File support like TMP_DIR');
+  console.log('       eval $(cli-shezargs $@)               # Parse args, scripts');
+  console.log('       eval $(cli-shezargs)                  # Just scripts');
+  process.exit(0);
+}
+
 process.stdout.on('error', function( err ) {
   if (err.code == "EPIPE") {
     process.exit(0);
