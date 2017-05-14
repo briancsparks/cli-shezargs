@@ -76,6 +76,15 @@ wait_for_start() {
   sleep 3
 }
 
+# Adding file support adds TMP_DIR, rm it
+cli_shezargs_cleanup() {
+  if [[ -n $CLI_SHEZARGS_TMP_DIR ]]; then
+    if [[ -d $CLI_SHEZARGS_TMP_DIR ]]; then
+      rm -rf $CLI_SHEZARGS_TMP_DIR
+    fi
+  fi
+}
+
 RESET="\033[0m"
 RED="\033[31m"
 YELLOW="\033[33m"
@@ -85,4 +94,7 @@ echoerr() { echo "$@" 1>&2; }
 echoerr_red() { echo -e "${RED}${@}${RESET}" 1>&2; }
 echoerr_redbg() { echo -e "${REDBG}${@}${RESET}" 1>&2; }
 echoerr_yellow() { echo -e "${YELLOW}${@}${RESET}" 1>&2; }
+
+start_dir="$(pwd)"
+script_dir="$(dirname $0)"
 

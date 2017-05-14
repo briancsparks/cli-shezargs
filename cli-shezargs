@@ -38,6 +38,7 @@ var main = function() {
     fs.ensureFileSync(logFile);
     fs.ensureFileSync(jsonFile);
 
+    process.stdout.write('CLI_SHEZARGS_TMP_DIR="'+tmpDir+'"'+'\n');
     process.stdout.write('TMP_DIR="'+tmpDir+'"'+'\n');
     process.stdout.write('TMP_FILE="'+tmpFile+'"'+'\n');
     process.stdout.write('LOG_FILE="'+logFile+'"'+'\n');
