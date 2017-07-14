@@ -98,3 +98,8 @@ echoerr_yellow() { echo -e "${YELLOW}${@}${RESET}" 1>&2; }
 start_dir="$(pwd)"
 script_dir="$(dirname $0)"
 
+scripts_dir="$script_dir"
+if [[ ${scripts_dir:0:1} != / ]]; then
+  scripts_dir="$(realpath $scripts_dir)"
+fi
+

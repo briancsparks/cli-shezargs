@@ -1,6 +1,6 @@
 {
   "name": "cli-shezargs",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "description": "Easy command-line args for shell scripts.",
   "main": "index.js",
   "bin": {
