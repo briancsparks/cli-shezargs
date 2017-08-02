@@ -61,6 +61,13 @@ main();
 
 function parseArgs() {
 
+  process.stdout.write('unset orig_args\n');
+  _.each(process.argv, function(arg, num) {
+    if (num > 1) {
+      process.stdout.write('orig_args="$orig_args '+arg+'"\n');
+    }
+  });
+
   // What kind of support does the script want?
   if (process.argv.length < 3) { return; }              // No args, so no pre-processing
 

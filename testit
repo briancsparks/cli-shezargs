@@ -11,6 +11,10 @@ baz="iamset"
 
 eval "$(cli-shezargs $@)"
 
+echo 'orig_args:'
+echo $orig_args
+echo '/orig_args'
+
 [[ $foo_be == bar ]] || die "foo_be should be bar"
 [[ $foo_it == 1   ]] || die "foo_it should be 1"
 [[ $foo == quxx   ]] || die "foo should be quxx"
