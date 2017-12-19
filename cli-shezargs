@@ -59,7 +59,6 @@ var main = function() {
     }
   });
 };
-main();
 
 function parseArgs() {
 
@@ -99,6 +98,7 @@ function parseArgs() {
 
   var arg, m, key, i;
 
+  var foundArgs = {argv:[]};
   for (i=startArgNum; i < process.argv.length; i++) {
     arg               = process.argv[i];
     key               = '';
@@ -111,6 +111,7 @@ function parseArgs() {
     // everything after -- is just a positional arg
     else if (pastLast) {
       positionArgs.push(arg);
+      foundArgs.argv.push(arg);
     }
 
     // --foo=bar      (export foo="bar")
@@ -118,12 +119,14 @@ function parseArgs() {
       key = m[1].replace(/[^a-z0-9]/gi, '_');
       //process.stdout.write('export '+key+'="'+m[2]+'"\n');
       process.stdout.write(''+key+'="'+m[2]+'"\n');
+      foundArgs[key] = m[2];
     }
 
     // --foo-         (unset foo)
     else if ((m = arg.match(/^--([^=]+)-$/))) {
       key = m[1].replace(/[^a-z0-9]/gi, '_');
       process.stdout.write("unset "+key+'\n');
+      foundArgs[key] = false;
     }
 
     // --foo-it        (export foo_it="1")
@@ -131,13 +134,41 @@ function parseArgs() {
       key = m[1].replace(/[^a-z0-9]/gi, '_');
       //process.stdout.write('export '+key+'="1'+'"\n');
       process.stdout.write(''+key+'="1'+'"\n');
+      foundArgs[key] = 1;
     }
 
     // Otherwise, this is just a positional arg
     else {
       positionArgs.push(arg);
+      foundArgs.argv.push(arg);
     }
   }
+
+  // For example, doing `blue` as an arg also does --blue
+  var discoveredArgs = {argv:[]};
+  _.each(foundArgs.argv, function(arg) {
+    if (isSelfSettingArg(arg)) {
+      discoveredArgs[arg] = 1;
+    }
+  });
+
+  var processingArgs = _.omit(_.extend({}, foundArgs, discoveredArgs), 'argv');
+
+  // For example, doing --blue also does --color=blue
+  var capturedKey;
+  _.each(processingArgs, function(value, key) {
+    if ((capturedKey = isCaptureArg(key, value))) {
+      discoveredArgs[capturedKey] = key;
+    }
+  });
+
+  console.error('discovered', discoveredArgs);
+
+  _.each(_.omit(discoveredArgs, 'argv'), function(value, key) {
+    if (arg !== false) {
+      process.stdout.write(''+key+'="'+value+'"\n');
+    }
+  });
 
   // Now reset the position args
   if (positionArgs.length > 0) {
@@ -150,4 +181,34 @@ function parseArgs() {
   }
 }
 
+const selfSettingArgs = keyMirror('green,blue,teal,yellow'.split(','));
+function isSelfSettingArg(arg) {
+  return (arg in selfSettingArgs);
+}
+
+var   capturedKeys = {};
+
+_valueKey(capturedKeys, 'color', 'green,blue,teal,yellow');
+
+function isCaptureArg(key, value) {
+  return capturedKeys[key];
+}
+
+function _valueKey(obj, key, values) {
+  if (_.isString(values)) { return _valueKey(obj, key, values.split(',')); }
+
+  _.each(values, function(value) {
+    obj[value] = key;
+  });
+}
+
+
+function keyMirror(keys) {
+  return _.reduce(keys, function(m, key) {
+    m[key] = key;
+    return m;
+  }, {});
+}
+
+main();
 
