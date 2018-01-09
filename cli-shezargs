@@ -162,7 +162,7 @@ function parseArgs() {
     }
   });
 
-  console.error('discovered', discoveredArgs);
+//  console.error('discovered', discoveredArgs);
 
   _.each(_.omit(discoveredArgs, 'argv'), function(value, key) {
     if (arg !== false) {
